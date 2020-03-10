@@ -2,6 +2,6 @@ FROM alpine:3.10
 
 COPY LICENSE README.md /
 
-COPY entrypoint.sh /entrypoint.sh
+COPY entrypoint.py /entrypoint.py
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.py"]
