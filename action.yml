@@ -2,8 +2,8 @@ name: 'Container Action Template'
 description: 'Get started with Container actions'
 author: 'GitHub'
 inputs:
-  output:
-    description: 'Output for directory'
+  where-to:
+    description: 'Where to write to'
     default: 'directory'
 runs:
   using: 'docker'
