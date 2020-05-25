@@ -5,10 +5,45 @@ import sys
 import datetime
 import logging
 import tempfile
+import collections
 
 # from action import build
 from sphinx.cmd.build import main
-from action import status
+
+
+
+class AnnotationLevel:
+    # Notices are not currently supported.
+    # NOTICE = "notice"
+    WARNING = "warning"
+    FAILURE = "failure"
+
+
+CheckAnnotation = collections.namedtuple(
+    "CheckAnnotation", ["path", "start_line", "end_line", "annotation_level", "message"]
+)
+
+
+def output(annotation, where_to_print=sys.stdout):
+    level_to_command = {
+        AnnotationLevel.WARNING: "warning",
+        AnnotationLevel.FAILURE: "error",
+    }
+
+    command = level_to_command[annotation.annotation_level]
+
+    print(
+        "::{command} file={file},line={line}::{message}".format(
+            command=command,
+            file=annotation.path,
+            line=annotation.start_line,
+            message=annotation.message,
+        ),
+        file=where_to_print,
+    )
+
+
+
 
 def extract_line_information(line_information):
     r"""Lines from sphinx log files look like this
@@ -75,12 +110,12 @@ def parse_sphinx_warnings_log(logfile):
             warning_message = warning_message.strip()
 
             annotations.append(
-                status.CheckAnnotation(
+                CheckAnnotation(
                     path=file_name,
                     message=warning_message,
                     start_line=line_number,
                     end_line=line_number,
-                    annotation_level=status.AnnotationLevel.WARNING,
+                    annotation_level=AnnotationLevel.WARNING,
                 )
             )
 
@@ -103,5 +138,5 @@ if __name__=='__main__':
     sphinx_options = f'--keep-going --no-color -a -w {log_file} {input} {output}'
     main(sphinx_options.split(" "))
     for annotation in parse_sphinx_warnings_log(log_file):
-        status.output(annotation)
+        output(annotation)
     print(f"::set-output name=time::{time}")
