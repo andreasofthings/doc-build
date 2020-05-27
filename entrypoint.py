@@ -75,12 +75,17 @@ def extract_line_information(line_information: str) -> LineInfo:
 if __name__=='__main__':
     logging.debug("[build documentation] Starting documentation-action build.")
 
+    input = os.environ.get("INPUT_DOCS", 'docs')
+    output = os.environ.get("INPUT_DEST", 'build')
+
+    if os.path.exists(os.path.join(input, "requirements.txt")):
+        import pip
+        pip.main(['install', "-r", os.path.join(input, "requirements.txt")])
+
+
     logfile = os.path.join(tempfile.gettempdir(), "sphinx-log")
     if os.path.exists(logfile):
         os.unlink(logfile)
-
-    input = os.environ.get("INPUT_DOCS", 'docs')
-    output = os.environ.get("INPUT_DEST", 'build')
 
     options = f'--keep-going --no-color -a -q -w {logfile} {input} {output}'
 

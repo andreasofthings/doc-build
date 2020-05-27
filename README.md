@@ -1,5 +1,20 @@
-# Container Action Template
+# doc-build github action
 
-To get started, click the `Use this template` button on this repository [which will create a new repository based on this template](https://github.blog/2019-06-06-generate-new-repositories-with-repository-templates/).
+This action build [sphinx](https://www.sphinx-doc.org/) documentation.
 
-For info on how to build your first Container action, see the [toolkit docs folder](https://github.com/actions/toolkit/blob/master/docs/container-action.md).
+## Inputs
+
+### `docs`
+
+**Required** The location of the documentation source to build. Default `"docs"`.
+
+### `dest`
+
+**Required** The destination directory. Default `"build"`.
+
+## Example usage
+
+uses: andreasofthings/doc-build@v13
+with:
+  docs: 'docs'
+  dest: 'build'
