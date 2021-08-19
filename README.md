@@ -14,7 +14,9 @@ This action build [sphinx](https://www.sphinx-doc.org/) documentation.
 
 ## Example usage
 
+```
 uses: andreasofthings/doc-build@v13
 with:
   docs: 'docs'
   dest: 'build'
+```
